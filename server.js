@@ -20,40 +20,114 @@ router.get('/', function(req, res) {
 });
 
 // more routes for our API will happen here
-router.get('/developers', function(req, res) {
-	var developers = [];
+router.get('/:name', function(req, res) {
 	var data = "";
-	fs.readFile(__dirname + "/" + "developers.json", 'utf8', function(err, data) {
+	var name = "";
+	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
 		data = JSON.parse(data);
-		for (var i = 0; i < data.developers.length; i++) {
-			developers.push(data.developers[i].info);
+		name = data.name.substr(0, data.name.indexOf(" "));
+		if (name == req.params.name) {
+			res.json(data);
+		} else {
+			res.status(404).send('No match for: ' + name);
 		}
-		res.json(developers);
+	});
+});
+router.get('/:name/info', function(req, res) {
+	var data = "";
+	var name = "";
+	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
+		data = JSON.parse(data);
+		name = data.name.substr(0, data.name.indexOf(" "));
+		if (name == req.params.name) {
+			if (Object.keys(data.info).length >= 1) {
+				res.json(data.info);
+			} else {
+				res.status(404).send("No info found for: " + name);
+			}
+		} else {
+			res.status(404).send('No match for: ' + name);
+		}
+	});
+});
+router.get('/:name/employed', function(req, res) {
+	var data = "";
+	var name = "";
+	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
+		data = JSON.parse(data);
+		name = data.name.substr(0, data.name.indexOf(" "));
+		if (name == req.params.name) {
+			res.json(data.employed);
+		} else {
+			res.status(404).send('No match for: ' + name);
+		}
+	});
+});
+router.get('/:name/skillset', function(req, res) {
+	var data = "";
+	var name = "";
+	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
+		data = JSON.parse(data);
+		name = data.name.substr(0, data.name.indexOf(" "));
+		if (name == req.params.name) {
+			if (Object.keys(data.skillset).length >= 1) {
+				res.json(data.skillset);
+			} else {
+				res.status(404).send(name + "has no skills!");
+			}
+		} else {
+			res.status(404).send('No match for: ' + name);
+		}
+	});
+});
+router.get('/:name/skillset/core', function(req, res) {
+	var data = "";
+	var name = "";
+	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
+		data = JSON.parse(data);
+		name = data.name.substr(0, data.name.indexOf(" "));
+		if (name == req.params.name) {
+			if (Object.keys(data.skillset).length >= 1) {
+				if (data.skillset.core.length >= 1) {
+					res.json(data.skillset.core);
+				} else {
+					res.status(404).send(name + "has no \"core\" skills!");
+				}
+			} else {
+				res.status(404).send(name + "has no skills!");
+			}
+		} else {
+			res.status(404).send('No match for: ' + name);
+		}
+	});
+});
+router.get('/:name/elevator_speach', function(req, res) {
+	var data = "";
+	var name = "";
+	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
+		data = JSON.parse(data);
+		name = data.name.substr(0, data.name.indexOf(" "));
+		if (name == req.params.name) {
+			if (Object.keys(data.elevator_speach).length >= 1) {
+				res.json(data.elevator_speach);
+			}
+		} else {
+			res.status(404).send('No match for: ' + name);
+		}
 	});
 });
 
-router.get('/developers/:name', function(req, res) {
-	var developers = [];
-	var data = "";
-	fs.readFile(__dirname + "/" + "developers.json", 'utf8', function(err, data) {
-		data = JSON.parse(data);
-		for (var i = 0; i < data.developers.length; i++) {
-			if (data.developers[i].info.name == req.params.name) {
-				developers.push(data.developers[i]);
-			}
-		}
-		if (developers.length != 0) {
-			res.json(developers);
-		} else {
-			res.status(404).send('No devs matched!');
-		}
-	});
-});
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
 // START THE SERVER
 // =============================================================================
-app.listen(port);
-console.log('Magic happens on port ' + port);
+//Required to get the app running when accessing with a domain
+if (typeof(PhusionPassenger) != 'undefined') {
+	console.log('Example app listening with passenger');
+	app.listen('passenger');
+} else {
+	app.listen(port);
+	console.log('Magic happens on port ' + port);
+}

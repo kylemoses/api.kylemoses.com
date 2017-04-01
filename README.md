@@ -1,2 +1,2 @@
-# api.kylemoses.com
+# kylemoses.com/api/
 Small REST API for my personal website
