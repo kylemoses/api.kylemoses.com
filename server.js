@@ -21,25 +21,23 @@ router.get('/', function(req, res) {
 
 // more routes for our API will happen here
 router.get('/:name', function(req, res) {
-	var data = "";
-	var name = "";
 	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
-		data = JSON.parse(data);
-		name = data.name.substr(0, data.name.indexOf(" "));
-		if (name == req.params.name) {
+		var data = JSON.parse(data);
+		var dataName = data.name.substr(0, data.name.indexOf(" ")).toUpperCase();
+		var reqName = req.params.name.toUpperCase();
+		if (reqName === dataName) {
 			res.json(data);
 		} else {
-			res.status(404).send('No match for: ' + name);
+			res.status(404).send('No match for: ' + reqName);
 		}
 	});
 });
 router.get('/:name/info', function(req, res) {
-	var data = "";
-	var name = "";
 	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
-		data = JSON.parse(data);
-		name = data.name.substr(0, data.name.indexOf(" "));
-		if (name == req.params.name) {
+		var data = JSON.parse(data);
+		var dataName = data.name.substr(0, data.name.indexOf(" ")).toUpperCase();
+		var reqName = req.params.name.toUpperCase();
+		if (reqName === dataName) {
 			if (Object.keys(data.info).length >= 1) {
 				res.json(data.info);
 			} else {
@@ -51,12 +49,11 @@ router.get('/:name/info', function(req, res) {
 	});
 });
 router.get('/:name/employed', function(req, res) {
-	var data = "";
-	var name = "";
 	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
-		data = JSON.parse(data);
-		name = data.name.substr(0, data.name.indexOf(" "));
-		if (name == req.params.name) {
+		var data = JSON.parse(data);
+		var dataName = data.name.substr(0, data.name.indexOf(" ")).toUpperCase();
+		var reqName = req.params.name.toUpperCase();
+		if (reqName === dataName) {
 			res.json(data.employed);
 		} else {
 			res.status(404).send('No match for: ' + name);
@@ -64,12 +61,11 @@ router.get('/:name/employed', function(req, res) {
 	});
 });
 router.get('/:name/skillset', function(req, res) {
-	var data = "";
-	var name = "";
 	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
-		data = JSON.parse(data);
-		name = data.name.substr(0, data.name.indexOf(" "));
-		if (name == req.params.name) {
+		var data = JSON.parse(data);
+		var dataName = data.name.substr(0, data.name.indexOf(" ")).toUpperCase();
+		var reqName = req.params.name.toUpperCase();
+		if (reqName === dataName) {
 			if (Object.keys(data.skillset).length >= 1) {
 				res.json(data.skillset);
 			} else {
@@ -81,12 +77,11 @@ router.get('/:name/skillset', function(req, res) {
 	});
 });
 router.get('/:name/skillset/core', function(req, res) {
-	var data = "";
-	var name = "";
 	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
-		data = JSON.parse(data);
-		name = data.name.substr(0, data.name.indexOf(" "));
-		if (name == req.params.name) {
+		var data = JSON.parse(data);
+		var dataName = data.name.substr(0, data.name.indexOf(" ")).toUpperCase();
+		var reqName = req.params.name.toUpperCase();
+		if (reqName === dataName) {
 			if (Object.keys(data.skillset).length >= 1) {
 				if (data.skillset.core.length >= 1) {
 					res.json(data.skillset.core);
@@ -102,12 +97,11 @@ router.get('/:name/skillset/core', function(req, res) {
 	});
 });
 router.get('/:name/elevator_speach', function(req, res) {
-	var data = "";
-	var name = "";
 	fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
-		data = JSON.parse(data);
-		name = data.name.substr(0, data.name.indexOf(" "));
-		if (name == req.params.name) {
+		var data = JSON.parse(data);
+		var dataName = data.name.substr(0, data.name.indexOf(" ")).toUpperCase();
+		var reqName = req.params.name.toUpperCase();
+		if (reqName === dataName) {
 			if (Object.keys(data.elevator_speach).length >= 1) {
 				res.json(data.elevator_speach);
 			}

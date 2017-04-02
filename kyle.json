@@ -1,15 +1,16 @@
 {
 	"id": 1,
 	"name": "Kyle Moses",
+	"picture": "http://www.kylemoses.com/img/jpg/me.jpg",
 	"role": "Web Developer",
 	"employed": true,
 	"elevator_speach": "I can't remember a time without my own computer. You could say I was a bit of a nerd growing up. I spent my childhood taking things apart just to put them back together again. Building has always been a part of my inquisitive nature, and now I enjoy it for a living as a web designer and front-end developer. The intricacy of writing code has always fascinated me. My natural love for trouble-shooting and well trained eye for design allow me to offer a more versatile skill set. This combination aligned with my passion for what I do puts me a cut above the rest.",
-	"skillset": {
+	"skill_set": {
 		"core": ["HTML5", "CSS3", "JavaScript", "jQuery", "Ajax", "Wordpress", "Git", "Photoshop", "Illustrator", "Problem Solving", "Learning Agility"],
-		"secondary": ["UI/UX Design", "Foundation", "Bootstrap", "Angular.js", "React.js", "Node.js", "NPM", "Grunt"],
-		"tertiary": [".NET", "C#", "PHP", "PhoneGap(Cordova)", "Webpack", "Sails.js", "Oauth", "Gigya Social Integration", "Twitch API", "Instagram API", "Youtube API", "MySQL"],
-		"dev-tools": ["Chrome", "Sublime Text", "iTerm2", "Cyberduck", "WAMP", "VirtualBox", "XCode", "Sequel Pro"]
+		"secondary": ["UI/UX Design", "Foundation", "Bootstrap", "Angular.js", "React.js", "Node.js", "Express.js"],
+		"tertiary": [".NET", "C#", "PHP", "PhoneGap(Cordova)", "Webpack", "Sails.js", "MySQL"]
 	},
+	"dev_tools": ["Chrome", "Sublime Text 3", "iTerm2", "Cyberduck", "WAMP", "VirtualBox", "XCode", "Sequel Pro"],
 	"work-history": [{
 		"company": "Express",
 		"title": "Web UI Developer",
