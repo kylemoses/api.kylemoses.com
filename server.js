@@ -19,7 +19,10 @@ fs.readFile(__dirname + "/" + "kyle.json", 'utf8', function(err, data) {
 });
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
-	res.json({ message: 'hooray! welcome to my api!' });
+	res.json({
+		message: 'hooray! welcome to my api!',
+		instructions: 'go to the main endpoint "/api/kyle/" to see my JSON style resume!'
+	});
 });
 
 // more routes for our API will happen here
