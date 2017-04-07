@@ -35,14 +35,35 @@ function findUser(users, name) {
 // get an instance of the express Router
 var router = express.Router();
 
-//public
-router.get('/', function(req, res) {
-	res.json({
-		message: 'hooray! welcome to my api!',
-		instructions: 'go to the main endpoint "/api/kyle/" to see my JSON style resume!'
-	});
+// error handling
+app.use(function(err, req, res, next) {
+	if (err.status !== 404) {
+		return next();
+	}
+
+	res.status(404);
+	res.send(err.message || '** no unicorns here **');
 });
 
+app.use(function(err, req, res, next) {
+	// log the error, treat it like a 500 internal server error
+	// maybe also log the request so you have more debug information
+	//log.error(err, req);
+
+	// during development you may want to print the errors to your console
+	//console.log(err.stack);
+
+	// send back a 500 with a generic message
+	res.status(500);
+	res.send('oops! something broke');
+});
+//public routes
+router.get('/', function(req, res) {
+	res.json({
+		message: 'Welcome to my api!',
+		instructions: "go to /api/authentiate?username=YOURUSERNAME&password=YOURPASSWORD to receive an authentication token"
+	});
+});
 router.get('/authenticate', function(req, res) {
 	var reqName = req.body.username || req.params.username || req.query.username;
 	var reqPass = req.body.password || req.params.password || req.query.password;
@@ -61,10 +82,14 @@ router.get('/authenticate', function(req, res) {
 					// if user is found and password is right
 					// create a token
 					if (user.username === 'kyle') {
+						//remove password from being encoded into the token
+						user.password = "";
 						var token = jwt.sign(user, app.get('superSecret'), {
 							expiresIn: "1440years" // expires in 24 hours
 						});
 					} else {
+						//remove password from being encoded into the token
+						user.password = "";
 						var token = jwt.sign(user, app.get('superSecret'), {
 							expiresIn: "1440m" // expires in 24 hours
 						});
@@ -116,6 +141,9 @@ router.use('/users', require('./routes/users'));
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
+app.get('*', function(req, res) {
+	res.status(404).json({ status: 404, message: 'woops! this doesn\'t look like a valid endpoint!' });
+});
 // Log requests to API using morgan
 app.use(logger('dev'));
 
