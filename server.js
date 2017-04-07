@@ -8,7 +8,7 @@ var express = require('express');
 var fs = require('fs');
 var logger = require('morgan');
 var jwt = require('jsonwebtoken');
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser').json();
 //
 var config = require('./config/main');
 var User = require('./models/user');
@@ -18,7 +18,7 @@ var app = express({ mergeParams: true });
 
 // use things
 app.set('superSecret', config.secret);
-app.use(bodyParser.json());
+app.use(bodyParser);
 // helpers
 function findUser(users, name) {
 	for (var i = users.length - 1; i >= 0; i--) {
@@ -44,8 +44,8 @@ router.get('/', function(req, res) {
 });
 
 router.get('/authenticate', function(req, res) {
-	var reqName = req.body.username;
-	var reqPass = req.body.password;
+	var reqName = req.body.username || req.params.username || req.query.username;
+	var reqPass = req.body.password || req.params.password || req.query.password;
 	fs.readFile(__dirname + "/" + "users.json", 'utf8', function(err, data) {
 		if (err) {
 			res.status(404).send({ status: 404, message: 'no users found!' });
