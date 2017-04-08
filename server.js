@@ -40,20 +40,11 @@ app.use(function(err, req, res, next) {
 	if (err.status !== 404) {
 		return next();
 	}
-
 	res.status(404);
 	res.send(err.message || '** no unicorns here **');
 });
 
 app.use(function(err, req, res, next) {
-	// log the error, treat it like a 500 internal server error
-	// maybe also log the request so you have more debug information
-	//log.error(err, req);
-
-	// during development you may want to print the errors to your console
-	//console.log(err.stack);
-
-	// send back a 500 with a generic message
 	res.status(500);
 	res.send('oops! something broke');
 });
@@ -141,9 +132,6 @@ router.use('/users', require('./routes/users'));
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
-app.get('*', function(req, res) {
-	res.status(404).json({ status: 404, message: 'woops! this doesn\'t look like a valid endpoint!' });
-});
 // Log requests to API using morgan
 app.use(logger('dev'));
 
