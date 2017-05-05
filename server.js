@@ -8,7 +8,7 @@ var express = require('express');
 var fs = require('fs');
 var logger = require('morgan');
 var jwt = require('jsonwebtoken');
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser').json();
 //
 var config = require('./config/main');
 var User = require('./models/user');
@@ -18,7 +18,7 @@ var app = express({ mergeParams: true });
 
 // use things
 app.set('superSecret', config.secret);
-app.use(bodyParser.json());
+app.use(bodyParser);
 // helpers
 function findUser(users, name) {
 	for (var i = users.length - 1; i >= 0; i--) {
@@ -35,17 +35,29 @@ function findUser(users, name) {
 // get an instance of the express Router
 var router = express.Router();
 
-//public
-router.get('/', function(req, res) {
-	res.json({
-		message: 'hooray! welcome to my api!',
-		instructions: 'go to the main endpoint "/api/kyle/" to see my JSON style resume!'
-	});
+// error handling
+app.use(function(err, req, res, next) {
+	if (err.status !== 404) {
+		return next();
+	}
+	res.status(404);
+	res.send(err.message || '** no unicorns here **');
 });
 
+app.use(function(err, req, res, next) {
+	res.status(500);
+	res.send('oops! something broke');
+});
+//public routes
+router.get('/', function(req, res) {
+	res.json({
+		message: 'Welcome to my api!',
+		instructions: "go to /api/authentiate?username=YOURUSERNAME&password=YOURPASSWORD to receive an authentication token"
+	});
+});
 router.get('/authenticate', function(req, res) {
-	var reqName = req.body.username;
-	var reqPass = req.body.password;
+	var reqName = req.body.username || req.params.username || req.query.username;
+	var reqPass = req.body.password || req.params.password || req.query.password;
 	fs.readFile(__dirname + "/" + "users.json", 'utf8', function(err, data) {
 		if (err) {
 			res.status(404).send({ status: 404, message: 'no users found!' });
@@ -61,10 +73,14 @@ router.get('/authenticate', function(req, res) {
 					// if user is found and password is right
 					// create a token
 					if (user.username === 'kyle') {
+						//remove password from being encoded into the token
+						user.password = "";
 						var token = jwt.sign(user, app.get('superSecret'), {
 							expiresIn: "1440years" // expires in 24 hours
 						});
 					} else {
+						//remove password from being encoded into the token
+						user.password = "";
 						var token = jwt.sign(user, app.get('superSecret'), {
 							expiresIn: "1440m" // expires in 24 hours
 						});
