@@ -1,5 +1,6 @@
 var express = require('express'),
 	router = express.Router();
+var User = require('./models/user.js');
 
 router.post('/', function(req, res) {
 	// create a sample user
@@ -9,7 +10,7 @@ router.post('/', function(req, res) {
 	var users = [];
 	var userExists = false;
 	// save the sample user
-	fs.readFile(__dirname + "/" + "users.json", 'utf8', function(err, data) {
+	fs.readFile(__dirname + "/" + "local_db.json", 'utf8', function(err, data) {
 		users = (JSON.parse(data));
 		for (var i = users.length - 1; i >= 0; i--) {
 			if (users[i].username === name) {
@@ -19,7 +20,7 @@ router.post('/', function(req, res) {
 		if (!userExists) {
 			var newuser = newUser.getInfo();
 			users.push(newUser.getInfo());
-			fs.writeFile(__dirname + "/" + "users.json", JSON.stringify(users), 'utf8', function(err, data) {
+			fs.writeFile(__dirname + "/" + "local_db.json", JSON.stringify(users), 'utf8', function(err, data) {
 				res.status(201).send({ status: 201, message: 'user added' });
 			});
 		} else {
