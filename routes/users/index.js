@@ -9,9 +9,10 @@ reqName = "";
 router.use(function(req, res, next) {
 	if (req.method === "GET") {
 		if (apiData.typeof != "Object") {
-			fs.readFile("./kyle.json", 'utf8', function(err, data) {
+			fs.readFile("./local_db.json", 'utf8', function(err, data) {
 				if (data != undefined) {
 					apiData = JSON.parse(data);
+					apiData = data.info;
 					next();
 				} else {
 					res.status(404).send({ 'error': 404, 'message': 'no data returned' });

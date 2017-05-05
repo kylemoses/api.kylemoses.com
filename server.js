@@ -19,18 +19,7 @@ var app = express({ mergeParams: true });
 // use things
 app.set('superSecret', config.secret);
 app.use(bodyParser);
-// helpers
-function findUser(users, name) {
-	for (var i = users.length - 1; i >= 0; i--) {
-		if (users[i].username === name) {
-			return {
-				"username": users[i].username,
-				"password": users[i].password
-			}
-		}
-	}
-	return false;
-}
+
 // ROUTES FOR OUR API
 // get an instance of the express Router
 var router = express.Router();
@@ -48,6 +37,7 @@ app.use(function(err, req, res, next) {
 	res.status(500);
 	res.send('oops! something broke');
 });
+
 //public routes
 router.get('/', function(req, res) {
 	res.json({
@@ -58,12 +48,19 @@ router.get('/', function(req, res) {
 router.get('/authenticate', function(req, res) {
 	var reqName = req.body.username || req.params.username || req.query.username;
 	var reqPass = req.body.password || req.params.password || req.query.password;
-	fs.readFile(__dirname + "/" + "users.json", 'utf8', function(err, data) {
+	fs.readFile(__dirname + "/" + "local_db.json", 'utf8', function(err, data) {
 		if (err) {
 			res.status(404).send({ status: 404, message: 'no users found!' });
 		} else {
-			users = (JSON.parse(data));
-			user = findUser(users, reqName);
+			data = (JSON.parse(data));
+			for (var i = data.length - 1; i >= 0; i--) {
+				if (data[i].login.username.toLowerCase() === reqName.toLowerCase()) {
+					user = {
+						username: data[i].login.username,
+						password: data[i].login.password
+					}
+				}
+			}
 			console.log(user)
 			if (user) {
 				// check if password matches

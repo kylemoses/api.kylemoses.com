@@ -3,12 +3,16 @@ var express = require('express'),
 	fs = require('fs');
 
 router.get('/', function(req, res) {
-	var users = "";
-	fs.readFile("./users.json", 'utf8', function(err, data) {
+	var users = [];
+	fs.readFile("./local_db.json", 'utf8', function(err, data) {
 		if (err) {
 			res.status(404).send({ status: 404, message: 'no users found!' });
 		} else {
-			users = (JSON.parse(data));
+			data = (JSON.parse(data));
+			for (var i = data.length - 1; i >= 0; i--) {
+				users.push(data[i].details.name);
+				console.log('users', users)
+			}
 			res.status(200).json(users);
 		}
 	});
